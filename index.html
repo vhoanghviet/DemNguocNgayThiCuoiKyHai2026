@@ -14,48 +14,74 @@
             font-family: 'Space Grotesk', sans-serif;
         }
 
+        /* ẨN THANH TRƯỢT BÊN PHẢI */
         body {
-            background-color: #0a0a0a;
+            /* Background đại dương sâu thẳm */
+            background: linear-gradient(to bottom, #001e36 0%, #004d7a 40%, #000a14 100%);
             color: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 3rem 1rem;
+            
+            /* Ẩn scrollbar Firefox & IE */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        /* GLOWING BLOB FOLLOWER */
-        #blob {
-            background: linear-gradient(to right, #00f2fe, #4facfe, #00f2fe);
-            height: 400px;
-            aspect-ratio: 1;
+        /* Ẩn scrollbar Chrome, Safari, Edge */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* OCEAN ANIMATIONS - ĐÁY BIỂN */
+        #ocean-bg {
             position: fixed;
-            left: 50%;
-            top: 50%;
-            translate: -50% -50%;
-            border-radius: 50%;
-            animation: rotate 20s infinite;
-            filter: blur(150px);
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: 0;
-            opacity: 0.6;
-            pointer-events: none; /* Không ngăn cản tương tác chuột với các thẻ */
-        }
-
-        @keyframes rotate {
-            from { rotate: 0deg; }
-            50% { scale: 1 1.5; }
-            to { rotate: 360deg; }
-        }
-
-        /* BLUR LAYER FOR GLASSMORPHISM */
-        #blur-layer {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            backdrop-filter: blur(60px);
-            z-index: 1;
             pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* San hô đáy biển */
+        .seabed {
+            position: absolute;
+            bottom: -10px;
+            width: 100%;
+            font-size: 3rem;
+            display: flex;
+            justify-content: space-around;
+            user-select: none;
+            filter: drop-shadow(0 -5px 10px rgba(0,0,0,0.8));
+        }
+
+        /* Sinh vật biển */
+        .fish {
+            position: absolute;
+            font-size: 3rem;
+            white-space: nowrap;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+            will-change: transform;
+        }
+
+        /* Bọt khí */
+        .bubble {
+            position: absolute;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
         }
 
         /* MAIN CONTENT */
@@ -73,6 +99,7 @@
             text-align: center;
             margin-bottom: 4rem;
             animation: fadeInDown 1s ease-out;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         h1 {
@@ -80,16 +107,10 @@
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            background: linear-gradient(to right, #ffffff, #a5b4fc);
+            background: linear-gradient(to right, #e0f2fe, #38bdf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
-        }
-
-        p.subtitle {
-            color: #94a3b8;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
         }
 
         /* GRID SYSTEM */
@@ -102,82 +123,59 @@
 
         /* GLASSMORPHISM CARDS */
         .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 50, 100, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            transition: border 0.3s ease;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: border 0.3s ease, transform 0.1s ease;
             cursor: pointer;
+            position: relative;
+            user-select: none;
         }
 
         .card:hover {
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            box-shadow: 0 10px 40px rgba(56, 189, 248, 0.2);
         }
 
-        .subject-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+        /* HIỆU ỨNG VẾT NỨT KÍNH */
+        .crack-line {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            height: 2px;
+            transform-origin: left center;
+            pointer-events: none;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            z-index: 10;
         }
 
-        .subject-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #f8fafc;
-            min-height: 3rem; /* Đồng bộ chiều cao tên môn */
+        /* MẢNH VỠ KÍNH RƠI XUỐNG */
+        .shard {
+            position: fixed;
+            background: rgba(100, 200, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
+            z-index: 9999;
+            pointer-events: none;
         }
 
-        .exam-date {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-bottom: 1.5rem;
-        }
+        /* STYLES CŨ GIỮ NGUYÊN */
+        .subject-icon { font-size: 3rem; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+        .subject-name { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; color: #f8fafc; min-height: 3rem; }
+        .exam-date { font-size: 0.9rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .timer { display: flex; gap: 1rem; justify-content: center; width: 100%; }
+        .time-box { display: flex; flex-direction: column; align-items: center; }
+        .time-value { font-size: 2rem; font-weight: 700; color: #38bdf8; text-shadow: 0 0 20px rgba(56, 189, 248, 0.4); font-variant-numeric: tabular-nums; }
+        .time-label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 0.2rem; }
+        .finished-text { font-size: 1.5rem; font-weight: 700; color: #4ade80; text-shadow: 0 0 20px rgba(74, 222, 128, 0.4); }
 
-        /* TIMER STYLES */
-        .timer {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .time-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #38bdf8;
-            text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .time-label {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 0.2rem;
-        }
-
-        .finished-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #4ade80;
-            text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
-        }
-
-        /* ANIMATIONS */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -186,7 +184,8 @@
         @media (max-width: 768px) {
             .grid { grid-template-columns: 1fr; max-width: 400px; }
         }
-        /* HIỆU ỨNG NỔ HẠT KHI CLICK */
+
+        /* NỔ HẠT (Thay màu cho hợp biển) */
         .particle {
             position: fixed;
             border-radius: 50%;
@@ -204,8 +203,11 @@
 </head>
 <body>
 
-    <div id="blob"></div>
-    <div id="blur-layer"></div>
+    <div id="ocean-bg">
+        <div class="seabed">
+            <span>🪸</span><span>🌿</span><span>🐚</span><span>🪸</span><span>🌿</span><span>🦀</span><span>🪸</span>
+        </div>
+    </div>
 
     <div class="content">
         <header>
@@ -213,23 +215,15 @@
         </header>
 
         <div class="grid" id="exam-grid">
-            </div>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
     <script>
-        // HIỆU ỨNG ÁNH SÁNG CHẠY THEO CHUỘT
-        const blob = document.getElementById("blob");
-        document.body.onpointermove = event => { 
-            const { clientX, clientY } = event;
-            blob.animate({
-                left: `${clientX}px`,
-                top: `${clientY}px`
-            }, { duration: 3000, fill: "forwards" });
-        }
-
-        // DATA CÁC MÔN THI (Đã sắp xếp theo thời gian)
+        // ==========================================
+        // 1. DATA MÔN THI & RENDER GIAO DIỆN
+        // ==========================================
         const exams = [
             { id: 1, name: "Cấu trúc dữ liệu & Giải thuật", date: "2026-06-30T00:00:00", icon: "💻" },
             { id: 2, name: "Đại số tuyến tính", date: "2026-07-03T00:00:00", icon: "📐" },
@@ -240,48 +234,34 @@
 
         const grid = document.getElementById('exam-grid');
 
-        // TẠO GIAO DIỆN CÁC THẺ MÔN HỌC
         exams.forEach(exam => {
-            const formattedDate = new Date(exam.date).toLocaleDateString('vi-VN', {
-                day: '2-digit', month: '2-digit', year: 'numeric'
-            });
-
+            const formattedDate = new Date(exam.date).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
             const cardHTML = `
-                <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05">
+                <div class="card" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05" id="card-${exam.id}">
                     <div class="subject-icon">${exam.icon}</div>
                     <div class="subject-name">${exam.name}</div>
                     <div class="exam-date">Ngày thi: ${formattedDate}</div>
                     <div class="timer" id="timer-${exam.id}">
-                        <div class="time-box">
-                            <span class="time-value" id="days-${exam.id}">00</span>
-                            <span class="time-label">Ngày</span>
-                        </div>
-                        <div class="time-box">
-                            <span class="time-value" id="hours-${exam.id}">00</span>
-                            <span class="time-label">Giờ</span>
-                        </div>
-                        <div class="time-box">
-                            <span class="time-value" id="mins-${exam.id}">00</span>
-                            <span class="time-label">Phút</span>
-                        </div>
-                        <div class="time-box">
-                            <span class="time-value" id="secs-${exam.id}">00</span>
-                            <span class="time-label">Giây</span>
-                        </div>
+                        <div class="time-box"><span class="time-value" id="days-${exam.id}">00</span><span class="time-label">Ngày</span></div>
+                        <div class="time-box"><span class="time-value" id="hours-${exam.id}">00</span><span class="time-label">Giờ</span></div>
+                        <div class="time-box"><span class="time-value" id="mins-${exam.id}">00</span><span class="time-label">Phút</span></div>
+                        <div class="time-box"><span class="time-value" id="secs-${exam.id}">00</span><span class="time-label">Giây</span></div>
                     </div>
                 </div>
             `;
             grid.insertAdjacentHTML('beforeend', cardHTML);
         });
 
-        // LOGIC ĐẾM NGƯỢC
+        // Kích hoạt Tilt 3D
+        VanillaTilt.init(document.querySelectorAll(".card"), { max: 15, speed: 400, glare: true, "max-glare": 0.2 });
+
+        // ==========================================
+        // 2. LOGIC ĐẾM NGƯỢC
+        // ==========================================
         function updateTimers() {
             const now = new Date().getTime();
-
             exams.forEach(exam => {
-                const countDownDate = new Date(exam.date).getTime();
-                const distance = countDownDate - now;
-
+                const distance = new Date(exam.date).getTime() - now;
                 const timerElement = document.getElementById(`timer-${exam.id}`);
 
                 if (distance < 0) {
@@ -289,64 +269,170 @@
                     return;
                 }
 
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                // Thêm số 0 ở trước nếu nhỏ hơn 10
-                document.getElementById(`days-${exam.id}`).innerText = days < 10 ? "0" + days : days;
-                document.getElementById(`hours-${exam.id}`).innerText = hours < 10 ? "0" + hours : hours;
-                document.getElementById(`mins-${exam.id}`).innerText = minutes < 10 ? "0" + minutes : minutes;
-                document.getElementById(`secs-${exam.id}`).innerText = seconds < 10 ? "0" + seconds : seconds;
+                document.getElementById(`days-${exam.id}`).innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                document.getElementById(`hours-${exam.id}`).innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                document.getElementById(`mins-${exam.id}`).innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                document.getElementById(`secs-${exam.id}`).innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
             });
         }
-
-        // Khởi chạy đếm ngược mỗi giây
         setInterval(updateTimers, 1000);
         updateTimers();
 
-        // Kích hoạt hiệu ứng 3D Tilt cho các thẻ vừa tạo
-        VanillaTilt.init(document.querySelectorAll(".card"), {
-            max: 15,
-            speed: 400,
-            glare: true,
-            "max-glare": 0.2
-        });
-        // HIỆU ỨNG NỔ HẠT KHI CLICK CHUỘT
-        document.addEventListener('click', function(e) {
-            // Mảng màu sắc của các hạt (xanh ngọc, xanh dương, trắng, tím nhạt)
-            const colors = ['#00f2fe', '#38bdf8', '#ffffff', '#a5b4fc'];
+        // ==========================================
+        // 3. HIỆU ỨNG ĐÁY BIỂN (CÁ VÀ BỌT KHÍ)
+        // ==========================================
+        const oceanBg = document.getElementById('ocean-bg');
+        const seaCreatures = [
+            '🦈', '🐋', '🐬', '🐡', '🐠', '🐟', '🐙', '🦑', 
+            '🐡💡' // Tượng trưng cho cá đèn lồng
+        ];
+
+        // Tạo bọt khí ngẫu nhiên
+        setInterval(() => {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 15 + 5;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 100}vw`;
+            bubble.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            oceanBg.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 10000);
+        }, 300);
+
+        // Tạo cá bơi lội
+        setInterval(() => {
+            const fish = document.createElement('div');
+            fish.className = 'fish';
+            fish.innerText = seaCreatures[Math.floor(Math.random() * seaCreatures.length)];
             
-            // Tạo 15 hạt cho mỗi lần click
-            for (let i = 0; i < 15; i++) {
+            const startY = Math.random() * 80 + 10; // 10% -> 90% chiều cao
+            const duration = Math.random() * 15000 + 10000; // 10s - 25s
+            const isRightToLeft = Math.random() > 0.5;
+
+            fish.style.top = `${startY}vh`;
+            
+            if (isRightToLeft) {
+                fish.style.left = `110vw`;
+                fish.animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-120vw)' }
+                ], { duration, fill: 'forwards' });
+            } else {
+                fish.style.left = `-10vw`;
+                // Xoay chiều cá nếu bơi từ trái sang phải
+                fish.style.transform = `scaleX(-1)`;
+                fish.animate([
+                    { transform: 'translateX(0) scaleX(-1)' },
+                    { transform: 'translateX(120vw) scaleX(-1)' }
+                ], { duration, fill: 'forwards' });
+            }
+
+            oceanBg.appendChild(fish);
+            setTimeout(() => fish.remove(), duration);
+        }, 2000); // 2 giây sinh 1 con cá
+
+        // ==========================================
+        // 4. HIỆU ỨNG ĐẬP VỠ BOX (SHATTER EFFECT)
+        // ==========================================
+        grid.addEventListener('click', function(e) {
+            const card = e.target.closest('.card');
+            if (!card) return;
+
+            let clicks = parseInt(card.dataset.clicks || 0) + 1;
+            card.dataset.clicks = clicks;
+
+            const rect = card.getBoundingClientRect();
+            // Lấy toạ độ click tương đối so với card
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            if (clicks <= 2) {
+                // TẠO VẾT NỨT
+                for(let i = 0; i < 4; i++) {
+                    const crack = document.createElement('div');
+                    crack.className = 'crack-line';
+                    crack.style.left = `${clickX}px`;
+                    crack.style.top = `${clickY}px`;
+                    crack.style.width = `${Math.random() * 100 + 50}px`;
+                    crack.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    card.appendChild(crack);
+                }
+                // Hơi rụt card lại
+                card.style.transform = `scale(${1 - clicks * 0.03})`;
+                card.style.boxShadow = `inset 0 0 ${clicks * 20}px rgba(255, 255, 255, 0.2)`;
+            
+            } else if (clicks === 3) {
+                // VỠ TAN THÀNH MẢNH
+                card.style.visibility = 'hidden';
+                
+                for(let i = 0; i < 20; i++) {
+                    const shard = document.createElement('div');
+                    shard.className = 'shard';
+                    
+                    const size = Math.random() * 50 + 30;
+                    shard.style.width = `${size}px`;
+                    shard.style.height = `${size}px`;
+                    
+                    // Cắt thành hình tam giác mảnh vỡ
+                    shard.style.clipPath = `polygon(${Math.random()*100}% 0, 100% ${Math.random()*100}%, 0 ${Math.random()*100}%)`;
+                    
+                    // Vị trí xuất phát của mảnh vỡ
+                    shard.style.left = `${rect.left + Math.random() * rect.width}px`;
+                    shard.style.top = `${rect.top + Math.random() * rect.height}px`;
+                    
+                    document.body.appendChild(shard);
+                    
+                    // Hiệu ứng rơi xuống đáy (Đáy = window.innerHeight)
+                    const dropDuration = Math.random() * 1500 + 1000;
+                    const dropX = (Math.random() - 0.5) * 300; 
+                    const dropY = window.innerHeight - rect.top + 100; // Đảm bảo rớt hẳn khỏi khung hình
+                    const rotate = Math.random() * 720 - 360;
+                    
+                    shard.animate([
+                        { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+                        { transform: `translate(${dropX}px, ${dropY}px) rotate(${rotate}deg)`, opacity: 0 }
+                    ], { duration: dropDuration, easing: 'cubic-bezier(0.5, 0, 1, 1)', fill: 'forwards' });
+                    
+                    // Xoá mảnh vỡ khỏi DOM sau khi rớt xong
+                    setTimeout(() => shard.remove(), dropDuration);
+                }
+
+                // HỒI SINH SAU 60 GIÂY
+                setTimeout(() => {
+                    card.style.visibility = 'visible';
+                    card.dataset.clicks = 0;
+                    card.style.transform = 'scale(1)';
+                    card.style.boxShadow = '';
+                    // Xoá các vết nứt cũ
+                    card.querySelectorAll('.crack-line').forEach(el => el.remove());
+                }, 60000); 
+            }
+        });
+
+        // ==========================================
+        // 5. HIỆU ỨNG NỔ BONG BÓNG KHI CLICK CHUỘT
+        // ==========================================
+        document.addEventListener('click', function(e) {
+            const colors = ['#87CEFA', '#E0FFFF', '#FFFFFF', '#00FFFF']; // Màu bọt nước
+            for (let i = 0; i < 10; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                
-                // Random kích thước, màu sắc và hướng bay
                 const size = Math.random() * 6 + 4; 
                 const color = colors[Math.floor(Math.random() * colors.length)];
                 const angle = Math.random() * Math.PI * 2;
-                const velocity = 40 + Math.random() * 60; // Tốc độ bay
-                const tx = Math.cos(angle) * velocity;
-                const ty = Math.sin(angle) * velocity;
+                const velocity = 30 + Math.random() * 50; 
                 
-                // Gán thuộc tính cho hạt
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
-                particle.style.color = color;
                 particle.style.backgroundColor = color;
                 particle.style.left = `${e.clientX - size/2}px`;
                 particle.style.top = `${e.clientY - size/2}px`;
-                particle.style.setProperty('--tx', `${tx}px`);
-                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.setProperty('--tx', `${Math.cos(angle) * velocity}px`);
+                particle.style.setProperty('--ty', `${Math.sin(angle) * velocity}px`);
                 
                 document.body.appendChild(particle);
-                
-                // Dọn dẹp DOM sau khi hiệu ứng chạy xong (0.6s)
-                setTimeout(() => {
-                    particle.remove();
-                }, 600);
+                setTimeout(() => particle.remove(), 600);
             }
         });
     </script>
